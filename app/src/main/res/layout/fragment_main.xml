@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/departureLocationLabel"
+        style="@style/AppLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:text="@string/from"/>
+
+    <TextView
+        android:id="@+id/departureLocation"
+        style="@style/AppInputText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/departureLocationLabel"
+        tools:text="Walldorf, GERMANY" />
+
+    <TextView
+        android:id="@+id/departureDateLabel"
+        style="@style/AppLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/departureLocation"
+        android:text="@string/departure_date" />
+
+    <TextView
+        android:id="@+id/departureDate"
+        style="@style/AppInputText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/departureDateLabel"
+        tools:text="Oct 10, 2016" />
+
+    <TextView
+        android:id="@+id/departureTimeLabel"
+        style="@style/AppLabel"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/departureLocation"
+        android:text="@string/time" />
+
+    <TextView
+        android:id="@+id/departureTime"
+        style="@style/AppInputText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/departureTimeLabel"
+        app:layout_constraintTop_toBottomOf="@+id/departureTimeLabel"
+        tools:text="8:00 AM" />
+
+    <ImageView
+        android:id="@+id/departureDivider"
+        android:layout_width="2dp"
+        android:layout_height="0dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/departureTime"
+        app:layout_constraintEnd_toStartOf="@+id/departureTimeLabel"
+        app:layout_constraintTop_toTopOf="@+id/departureTimeLabel"
+        app:srcCompat="@android:color/darker_gray"
+        android:layout_marginRight="8dp" />
+
+    <TextView
+        android:id="@+id/arrivalDateLabel"
+        style="@style/AppLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/arrival_date"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/departureTime" />
+
+    <TextView
+        android:id="@+id/arrivalDate"
+        style="@style/AppInputText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/arrivalDateLabel"
+        tools:text="Oct 10, 2016" />
+
+    <TextView
+        android:id="@+id/arrivalTimeLabel"
+        style="@style/AppLabel"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:text="@string/time"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/arrivalDateLabel" />
+
+    <TextView
+        android:id="@+id/arrivalTime"
+        style="@style/AppInputText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/arrivalTimeLabel"
+        app:layout_constraintTop_toBottomOf="@+id/arrivalTimeLabel"
+        tools:text="8:00 AM" />
+
+    <ImageView
+        android:id="@+id/arrivalDivider"
+        android:layout_width="2dp"
+        android:layout_height="0dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/arrivalTime"
+        app:layout_constraintEnd_toStartOf="@+id/arrivalTimeLabel"
+        app:layout_constraintTop_toTopOf="@+id/arrivalTimeLabel"
+        app:srcCompat="@android:color/darker_gray"
+        android:layout_marginRight="8dp" />
+
+    <Button
+        android:id="@+id/startButton"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:text="@string/start"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/arrivalPlace"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        tools:text="Bahnhofstraße, 67059 Ludwigshafen am Rhein"
+        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
+        app:layout_constraintBottom_toTopOf="@+id/startButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/arrivalTime" />
+
+    <TextView
+        android:id="@+id/changeArrivalLocation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/not_your_desire_address"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/arrivalPlace"
+        android:layout_marginRight="8dp" />
+</android.support.constraint.ConstraintLayout>
