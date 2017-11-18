@@ -1,9 +1,13 @@
 package com.mimi.destinationfinder.utils
 
+import com.mimi.destinationfinder.settings.SettingsContract
+import com.mimi.destinationfinder.settings.SettingsFragment
+import com.mimi.destinationfinder.settings.SettingsPresenter
 import com.mimi.destinationfinder.taskmain.MainContract
 import com.mimi.destinationfinder.taskmain.MainFragment
 import com.mimi.destinationfinder.taskmain.MainPresenter
 import com.mimi.destinationfinder.utils.Context.DestinationFinder
+import com.mimi.destinationfinder.utils.Context.Settings
 import org.koin.android.module.AndroidModule
 
 /**
@@ -18,6 +22,10 @@ class RecipeModule: AndroidModule(){
             provide { MainFragment() }
             provide { MainPresenter() } bind MainContract.Presenter::class
         }
+        context(Settings){
+            provide { SettingsFragment() }
+            provide { SettingsPresenter() } bind SettingsContract.Presenter::class
+        }
     }
 }
 /**
@@ -25,4 +33,5 @@ class RecipeModule: AndroidModule(){
  */
 object Context {
     val DestinationFinder = "DestinationFinder"
+    val Settings = "Context"
 }

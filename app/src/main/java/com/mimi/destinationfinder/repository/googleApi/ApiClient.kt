@@ -1,9 +1,10 @@
-package com.mimi.destinationfinder.repository.retrofit
+package com.mimi.destinationfinder.repository.googleApi
 
 import android.content.Context
 import android.content.pm.PackageManager
-import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.Retrofit
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
+import retrofit2.converter.gson.GsonConverterFactory
 
 
 /**
@@ -15,8 +16,8 @@ object ApiClient {
     private val BASE_URL = "https://maps.googleapis.com/"
     val client by lazy {
         Retrofit.Builder()
-                .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
+                .baseUrl(BASE_URL).addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build()
 
     }

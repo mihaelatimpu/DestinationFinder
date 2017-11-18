@@ -5,7 +5,7 @@ import android.content.ContentUris
 import android.database.Cursor
 import android.provider.CalendarContract
 import com.mimi.destinationfinder.dto.Event
-import java.util.*
+import com.mimi.destinationfinder.dto.Requirements
 
 /**
  * Created by Mimi on 17/11/2017.
@@ -27,13 +27,14 @@ class CalendarProvider {
         )
     }
 
-    fun getEvents(beginTime: Calendar, endTime: Calendar, cr: ContentResolver):List<Event> {
+    fun getEvents(cr: ContentResolver, minTimeInMillis:Long, maxTimeInMillis:Long):List<Event> {
         val builder = CalendarContract.Instances.CONTENT_URI.buildUpon()
-        ContentUris.appendId(builder, beginTime.timeInMillis)
-        ContentUris.appendId(builder, endTime.timeInMillis)
+        ContentUris.appendId(builder, minTimeInMillis)
+        ContentUris.appendId(builder, maxTimeInMillis)
+        val selection = "${CalendarContract.Instances.EVENT_LOCATION} <> ''"
         val cur = cr.query(builder.build(),
                 INSTANCE_PROJECTION,
-                "",
+                selection,
                 arrayOf(),
                 null)
         val events = arrayListOf<Event>()

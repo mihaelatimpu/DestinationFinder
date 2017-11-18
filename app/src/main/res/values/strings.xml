@@ -13,12 +13,53 @@
     <string name="start">Start</string>
     <string name="loading_data">Loading data</string>
     <string name="please_wait">Please wait</string>
-    <string name="requesting_read_events_permission">This app needs read events permission</string>
+    <string name="missing_permission">Missing permission</string>
     <string name="requesting_read_event_permission_description">The app requires event read permission, in order to find all locations available</string>
-<string name="grant_permission">Grant permission</string>
+    <string name="grant_permission">Grant permission</string>
     <string name="title_activity_place_finder">PlaceFinderActivity</string>
     <string name="error_invalid_arrival">The arrival time cannot be prior to departure</string>
     <string name="please_select_departure_location">Please select departure location!</string>
     <string name="not_your_desire_address">Not your desired address?</string>
     <string name="select_arrival_location">Select arrival location</string>
+    <string name="access_gsp_location_permission_explained">To continue, please allow gps locating</string>
+    <string name="access_network_location_permission_explained">To continue, please allow network locating</string>
+
+    <string name="title_activity_destination_finder">DestinationFinderActivity</string>
+
+    <!-- Settings -->
+    <string name="title_activity_settings">Settings</string>
+    <string name="save">Save</string>
+    <string name="radius">Radius</string>
+    <string-array name="radius_values">
+        <item>200m</item>
+        <item>500m</item>
+        <item>1 km</item>
+        <item>Automatic</item>
+    </string-array>
+    <string name="transport_mode">Transport mode</string>
+    <string-array name="transport_modes">
+        <item>Driving</item>
+        <item>Walking</item>
+        <item>Cycling</item>
+    </string-array>
+    <string name="max_results_per_search">Max results per search</string>
+    <string-array name="max_results">
+        <item>5</item>
+        <item>10</item>
+        <item>50</item>
+    </string-array>
+    <string name="place_types">Places of interest</string>
+    <string-array name="place_types">
+        <item>airport</item>
+        <item>hospital</item>
+        <item>amusement_park</item>
+        <item>aquarium</item>
+        <item>bank</item>
+        <item>bar</item>
+        <item>gym</item>
+        <item>meal_takeaway</item>
+        <item>cafe</item>
+        <item>dentist</item>
+        <item>university</item>
+    </string-array>
 </resources>

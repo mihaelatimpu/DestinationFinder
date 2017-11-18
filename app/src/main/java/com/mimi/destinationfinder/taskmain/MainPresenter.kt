@@ -1,13 +1,17 @@
 package com.mimi.destinationfinder.taskmain
 
-import android.util.Log
 import com.google.android.gms.location.places.Place
 import com.mimi.destinationfinder.R
-import com.mimi.destinationfinder.dto.*
-import com.mimi.destinationfinder.repository.PlacesRepository
+import com.mimi.destinationfinder.dto.Destination
+import com.mimi.destinationfinder.dto.Location
+import com.mimi.destinationfinder.dto.Requirements
+import com.mimi.destinationfinder.repository.sources.BaseSource
+import com.mimi.destinationfinder.repository.sources.CalendarEventSource
+import com.mimi.destinationfinder.repository.sources.GoogleApiSource
+import com.mimi.destinationfinder.repository.sources.MainDestinationSource
 import com.mimi.destinationfinder.utils.TimeConverter
-import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.onComplete
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import java.util.*
 
 /**
@@ -17,27 +21,57 @@ import java.util.*
 class MainPresenter : MainContract.Presenter {
 
     override lateinit var view: MainContract.View
+
     private val timeConverter = TimeConverter()
-    private val departureTime = Calendar.getInstance()
-    private val arrivalTime = Calendar.getInstance()
+    private val requirements = Requirements()
+
     private var departurePlace: Place? = null
-    private val placeTypes = listOf("airport", "hospital", "amusement_park", "aquarium", "bank", "bar", "gym"
-            , "meal_takeaway", "cafe", "dentist", "university")
-    private val placesRepository = PlacesRepository()
-    private val transportMean = TransportMean(TransportMean.TYPE_WALKING)
-    private val possibleDestinations = arrayListOf<Address>()
+    private var currentLocation: Destination? = null
+
+    private val possibleDestinations = arrayListOf<Destination>()
 
     override fun start() {
         if (!view.isActive)
             return
         view.init()
-        view.setDepartureTime(timeConverter.convertToRegularTimeString(departureTime))
-        view.setDepartureDate(timeConverter.convertToRegularDateString(departureTime))
+        view.setDepartureTime(timeConverter.convertToRegularTimeString(requirements.departureTime))
+        view.setDepartureDate(timeConverter.convertToRegularDateString(requirements.departureTime))
 
-        view.setArrivalTime(timeConverter.convertToRegularTimeString(arrivalTime))
-        view.setArrivalDate(timeConverter.convertToRegularDateString(arrivalTime))
+        requirements.arrivalTime.add(Calendar.HOUR, 1)
+        view.setArrivalTime(timeConverter.convertToRegularTimeString(requirements.arrivalTime))
+        view.setArrivalDate(timeConverter.convertToRegularDateString(requirements.arrivalTime))
         view.setDeparturePlace(getDeparturePlace())
+        getCurrentLocationFromGPS()
 
+    }
+
+    private fun getCurrentLocationFromGPS() {
+        view.checkForPermission(permission = android.Manifest.permission.ACCESS_FINE_LOCATION,
+                title = R.string.missing_permission,
+                description = R.string.access_gsp_location_permission_explained) {
+            if(it) {
+                currentLocation = view.getCurrentLocation(fromGPS = true)
+                if (currentLocation != null) {
+                    view.setDeparturePlace(currentLocation.toString())
+                } else {
+                    getCurrentLocationFromInternet()
+                }
+            } else {
+                getCurrentLocationFromInternet()
+            }
+        }
+    }
+    private fun getCurrentLocationFromInternet(){
+        view.checkForPermission(permission = android.Manifest.permission.ACCESS_COARSE_LOCATION,
+                title = R.string.missing_permission,
+                description = R.string.access_network_location_permission_explained) {
+            if(it) {
+                currentLocation = view.getCurrentLocation(fromNetwork = true)
+                if (currentLocation != null) {
+                    view.setDeparturePlace(currentLocation.toString())
+                }
+            }
+        }
     }
 
     private fun getDeparturePlace() = departurePlace?.name.toString()
@@ -51,105 +85,104 @@ class MainPresenter : MainContract.Presenter {
     override fun onDepartureDateClicked() {
         if (!view.isActive)
             return
-        view.showDatePicker(initialDate = departureTime) {
-            if (departureTime.timeInMillis > it.timeInMillis) {
+        view.showDatePicker(initialDate = requirements.departureTime) {
+            if (requirements.departureTime.timeInMillis > it.timeInMillis) {
                 view.toast(R.string.error_invalid_arrival)
                 return@showDatePicker
             }
-            departureTime.timeInMillis = it.timeInMillis
-            view.setDepartureDate(timeConverter.convertToRegularDateString(departureTime))
+            requirements.departureTime.timeInMillis = it.timeInMillis
+            view.setDepartureDate(timeConverter.convertToRegularDateString(
+                    requirements.departureTime))
         }
     }
 
     override fun onArrivalDateClicked() {
         if (!view.isActive)
             return
-        view.showDatePicker(initialDate = arrivalTime, minDate = departureTime) {
-            arrivalTime.timeInMillis = it.timeInMillis
-            view.setArrivalDate(timeConverter.convertToRegularDateString(arrivalTime))
+        view.showDatePicker(initialDate = requirements.arrivalTime,
+                minDate = requirements.departureTime) {
+            requirements.arrivalTime.timeInMillis = it.timeInMillis
+            view.setArrivalDate(
+                    timeConverter.convertToRegularDateString(requirements.arrivalTime))
         }
     }
 
     override fun onStartButtonPressed() {
         if (!view.isActive) return
-        if (departurePlace == null) {
+        if (departurePlace == null && currentLocation == null) {
             view.toast(R.string.please_select_departure_location)
             return
         }
         view.checkForPermission(permission = android.Manifest.permission.READ_CALENDAR,
-                title = R.string.requesting_read_events_permission,
+                title = R.string.missing_permission,
                 description = R.string.requesting_read_event_permission_description) {
             //loadAllCalendarEvents()
-            findPlacesInRange()
+            findPlacesInRange(it, true)
         }
     }
 
-    private fun findPlacesInRange() {
+    private fun findPlacesInRange(searchCalendar: Boolean, searchApi: Boolean) {
         view.showLoadingDialog()
         possibleDestinations.clear()
-        doAsync {
-            val timeDifference = arrivalTime.timeInMillis - departureTime.timeInMillis
-            val location = Location(departurePlace!!.latLng)
-            placesRepository.findPlacesWithGoogleApi(context = view.getContext(),
-                    location = location,
-                    radius = 500,
-                    transportMean = transportMean, maxResults = 50, timeToGetThere = timeDifference,
-                    types = placeTypes, onCompleted = {
-                possibleDestinations.addAll(it)
-                if (possibleDestinations.isEmpty())
-                    view.hideArrivalAddress()
-                else
-                    view.showArrivalAddress(possibleDestinations.first().toString())
-                view.hideLoadingDialog()
-            })
-        }
+        if (departurePlace != null)
+            requirements.initialLocation = Location(departurePlace!!.latLng)
+        else
+            requirements.initialLocation = currentLocation!!.location!!
+
+        val sources = arrayListOf<BaseSource>()
+        if (searchCalendar)
+            sources.add(CalendarEventSource(requirements))
+        if (searchApi)
+            sources.add(GoogleApiSource(requirements))
+
+        MainDestinationSource(requirements, sources).start(view.getContext())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnError {
+                    view.toast(it.message.toString())
+                    it.printStackTrace()
+                    view.hideLoadingDialog()
+                }
+                .doOnNext {
+                    possibleDestinations.add(it)
+                    if (possibleDestinations.size == 1) {
+                        view.showArrivalAddress(it.toString())
+                    }
+                }
+                .doOnComplete {
+                    view.hideLoadingDialog()
+                }
+                .subscribe()
     }
 
     override fun onChangeArrivalPressed() {
         if (!view.isActive) return
         val list = possibleDestinations.map { it.toString() }
         view.showListSelector(list) {
-            view.showArrivalAddress(it.toString())
+            view.showArrivalAddress(it)
         }
     }
 
-    private fun loadAllCalendarEvents() {
-        view.showLoadingDialog()
-        val events = arrayListOf<Event>()
-        doAsync {
-            try {
-                events.addAll(placesRepository.getEventsFromCalendar(beginTime = departureTime,
-                        endTime = arrivalTime, cr = view.getContentResolver()))
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-            onComplete {
-                Log.d("Events received", "Events; ${events.size}")
-                view.hideLoadingDialog()
-            }
-        }
-
-    }
 
     override fun onDepartureTimeClicked() {
         if (!view.isActive)
             return
-        view.showTimePicker(initialDate = departureTime) {
-            departureTime.timeInMillis = it.timeInMillis
-            view.setDepartureTime(timeConverter.convertToRegularTimeString(departureTime))
+        view.showTimePicker(initialDate = requirements.departureTime) {
+            requirements.departureTime.timeInMillis = it.timeInMillis
+            view.setDepartureTime(timeConverter.convertToRegularTimeString(requirements.departureTime))
         }
     }
 
     override fun onArrivalTimeClicked() {
         if (!view.isActive)
             return
-        view.showTimePicker(initialDate = arrivalTime) {
-            if (departureTime.timeInMillis > it.timeInMillis) {
+        view.showTimePicker(initialDate = requirements.arrivalTime) {
+            if (requirements.departureTime.timeInMillis > it.timeInMillis) {
                 view.toast(R.string.error_invalid_arrival)
                 return@showTimePicker
             }
-            arrivalTime.timeInMillis = it.timeInMillis
-            view.setArrivalTime(timeConverter.convertToRegularTimeString(arrivalTime))
+            requirements.arrivalTime.timeInMillis = it.timeInMillis
+            view.setArrivalTime(timeConverter.convertToRegularTimeString(requirements.arrivalTime))
         }
     }
 

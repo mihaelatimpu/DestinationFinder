@@ -5,6 +5,7 @@ import android.support.annotation.StringRes
 import com.google.android.gms.location.places.Place
 import com.mimi.destinationfinder.base.BasePresenter
 import com.mimi.destinationfinder.base.BaseView
+import com.mimi.destinationfinder.dto.Destination
 import java.util.*
 
 /**
@@ -25,7 +26,9 @@ interface MainContract{
         fun showArrivalAddress(address:String)
         fun hideArrivalAddress()
         fun showListSelector(options:List<String>, onSelected:(String)->Unit)
-        fun checkForPermission(permission: String,@StringRes title:Int, @StringRes description:Int, onPermissionGranted:()->Unit)
+        fun checkForPermission(permission: String, @StringRes title:Int,
+                               @StringRes description:Int, onPermissionResult:(Boolean)->Unit)
+        fun getCurrentLocation(fromGPS:Boolean = false, fromNetwork:Boolean = false):Destination?
     }
     interface Presenter:BasePresenter<View>{
         fun onDeparturePlaceClicked()

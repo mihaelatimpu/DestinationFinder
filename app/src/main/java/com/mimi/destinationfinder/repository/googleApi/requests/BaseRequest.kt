@@ -1,7 +1,7 @@
-package com.mimi.destinationfinder.repository.retrofit.requests
+package com.mimi.destinationfinder.repository.googleApi.requests
 
-import com.mimi.destinationfinder.repository.retrofit.RetrofitInterface
-import com.mimi.destinationfinder.repository.retrofit.responses.BaseResponse
+import com.mimi.destinationfinder.repository.googleApi.RetrofitInterface
+import com.mimi.destinationfinder.repository.googleApi.responses.BaseResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

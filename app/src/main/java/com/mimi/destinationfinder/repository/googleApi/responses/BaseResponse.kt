@@ -1,4 +1,4 @@
-package com.mimi.destinationfinder.repository.retrofit.responses
+package com.mimi.destinationfinder.repository.googleApi.responses
 
 /**
  * Created by Mimi on 17/11/2017.

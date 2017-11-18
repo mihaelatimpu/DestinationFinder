@@ -151,12 +151,13 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        tools:text="Bahnhofstraße, 67059 Ludwigshafen am Rhein"
+        android:padding="10dp"
         android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
         app:layout_constraintBottom_toTopOf="@+id/startButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/arrivalTime" />
+        app:layout_constraintTop_toBottomOf="@+id/arrivalTime"
+        tools:text="Bahnhofstraße, 67059 Ludwigshafen am Rhein" />
 
     <TextView
         android:id="@+id/changeArrivalLocation"
