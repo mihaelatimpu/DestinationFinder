@@ -168,7 +168,7 @@ class MainPresenter : MainContract.Presenter {
                     }
                 }
                 .doOnComplete {
-                    val sortedList = possibleDestinations.sortedBy { it.arrivalTime }
+                    val sortedList = possibleDestinations.sortedBy { it.errorMargin }
                     possibleDestinations.clear()
                     possibleDestinations.addAll(sortedList)
                     if (possibleDestinations.isNotEmpty())
