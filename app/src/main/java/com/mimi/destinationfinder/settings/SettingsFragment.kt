@@ -8,6 +8,10 @@ import android.view.View
 import android.view.ViewGroup
 import com.mimi.destinationfinder.R
 import com.mimi.destinationfinder.base.BaseFragment
+import com.mimi.destinationfinder.dto.Radius
+import com.mimi.destinationfinder.dto.ResultsCount
+import com.mimi.destinationfinder.dto.Settings
+import com.mimi.destinationfinder.dto.TransportMode
 import com.mimi.destinationfinder.utils.Context
 import kotlinx.android.synthetic.main.fragment_settings.*
 import org.koin.android.ext.android.inject
@@ -21,6 +25,7 @@ class SettingsFragment : BaseFragment(), SettingsContract.View {
         get() = isAdded
     override val contextName = Context.Settings
     override val presenter: SettingsContract.Presenter by inject()
+    lateinit var adapter: PlaceTypeAdapter
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?, savedInstanceState: Bundle?): View? =
@@ -33,10 +38,29 @@ class SettingsFragment : BaseFragment(), SettingsContract.View {
     }
 
     override fun init() {
-        placeTypesList.layoutManager = GridLayoutManager(context,2,GridLayoutManager.VERTICAL,false)
-        //placeTypesList.layoutManager = LinearLayoutManager(context,LinearLayoutManager.VERTICAL,false)
+        placeTypesList.layoutManager = GridLayoutManager(context,
+                2, GridLayoutManager.VERTICAL, false)
         val items = context.resources.getStringArray(R.array.place_types).toList()
-        placeTypesList.adapter = PlaceTypeAdapter(allItems = items,context = context)
+        adapter = PlaceTypeAdapter(allItems = items, context = context)
+        placeTypesList.adapter = adapter
+        saveButton.setOnClickListener { presenter.saveSettings() }
     }
+
+    override fun exit() {
+        activity.finish()
+    }
+
+    override fun refreshSettings(settings: Settings) {
+        radius_spinner.setSelection(settings.radius.type)
+        transportModeSpinner.setSelection(settings.transportMode.type)
+        maxResultsSpinner.setSelection(settings.maxResultPerCount.type)
+        adapter.refreshSelectedItems(settings.placesOnInterests)
+    }
+
+    override fun collectSettings() =
+            Settings(radius = Radius(radius_spinner.selectedItemPosition),
+                    transportMode = TransportMode(transportModeSpinner.selectedItemPosition),
+                    maxResultPerCount = ResultsCount(maxResultsSpinner.selectedItemPosition),
+                    placesOnInterests = adapter.selectedItems)
 
 }

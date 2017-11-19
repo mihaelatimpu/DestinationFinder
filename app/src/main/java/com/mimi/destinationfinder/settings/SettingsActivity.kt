@@ -3,6 +3,7 @@ package com.mimi.destinationfinder.settings
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
+import android.view.MenuItem
 import android.view.View
 import com.mimi.destinationfinder.R
 import com.mimi.destinationfinder.taskmain.MainFragment
@@ -30,6 +31,13 @@ class SettingsActivity : AppCompatActivity() {
                 ?: fragment.also {
             replaceFragmentInActivity(it, R.id.contentFrame)
         }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == android.R.id.home) {
+            onBackPressed()
+        }
+        return super.onOptionsItemSelected(item)
     }
 
 

@@ -39,7 +39,9 @@ class CalendarEventSource(override val data: Requirements) : BaseSource {
         val defaultDestination = Destination(cityName = event.location, errorMargin = 1.0)
         val location = convertStringToLocation(event.location)
                 ?: return defaultDestination
-        return converter.getAddress(context, location) ?: defaultDestination
+        val destination =  converter.getAddress(context, location) ?: defaultDestination
+        destination.arrivalTime = event.eventStartTime
+        return destination
     }
 
     private fun convertStringToLocation(string: String): Location? {

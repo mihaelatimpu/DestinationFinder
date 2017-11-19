@@ -17,18 +17,18 @@ class FilterPlacesUtil {
         initialList.forEach {
             val calculatedTime = timeCalculator.calculateTime(
                     from = data.initialLocation, to = it.geometry.location,
-                    mean = data.transportMean)
+                    mean = data.settings.transportMode)
 
-            it.errorMargin = Math.abs(calculatedTime - data.getTravelTimeInMinutes())
+            it.errorMargin = Math.abs(calculatedTime - data.givenTravelTime())
         }
 
         val listReorderedByMinutes = initialList.sortedBy {
             it.errorMargin
 
         }
-        return if (listReorderedByMinutes.size < data.maxResults)
+        return if (listReorderedByMinutes.size < data.settings.maxResultPerCount.getMaxResults())
             listReorderedByMinutes
         else
-            listReorderedByMinutes.subList(0, data.maxResults.toInt())
+            listReorderedByMinutes.subList(0, data.settings.maxResultPerCount.getMaxResults())
     }
 }

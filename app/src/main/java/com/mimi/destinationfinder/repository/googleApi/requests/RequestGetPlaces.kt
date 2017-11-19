@@ -24,9 +24,9 @@ class RequestGetPlaces(val data: Requirements) {
 
     private fun collectObservablesFromApi(api: RetrofitInterface, apiKey: String)
             : Observable<GetPlacesNearbyResponse> {
-        val observableList = data.types.map {
+        val observableList = data.settings.placesOnInterests.map {
             api.getPlacesNearby(apiKey,
-                    data.initialLocation.toString(), data.radius, it)
+                    data.initialLocation.toString(), data.getSearchRadius(), it)
         }
         return Observable.mergeDelayError(observableList)
 

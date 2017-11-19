@@ -19,16 +19,20 @@ interface MainContract{
         fun setDepartureTime(time:String)
         fun setArrivalDate(date:String)
         fun setArrivalTime(time:String)
+        fun showArrivalAddress(address:String)
+        fun hideArrivalAddress()
+        fun showListSelector(options:List<String>, onSelected:(String)->Unit)
+        fun getCurrentLocation(fromGPS:Boolean = false, fromNetwork:Boolean = false):Destination?
+        fun getMainActivity():Activity
+    }
+    interface Activity{
         fun showDatePicker(initialDate: Calendar,minDate:Calendar? = null, onComplete:(Calendar)->Unit)
         fun showTimePicker(initialDate: Calendar, onComplete:(Calendar)->Unit)
         fun startPlaceAutocompleteActivity()
         fun getContentResolver():ContentResolver
-        fun showArrivalAddress(address:String)
-        fun hideArrivalAddress()
-        fun showListSelector(options:List<String>, onSelected:(String)->Unit)
         fun checkForPermission(permission: String, @StringRes title:Int,
                                @StringRes description:Int, onPermissionResult:(Boolean)->Unit)
-        fun getCurrentLocation(fromGPS:Boolean = false, fromNetwork:Boolean = false):Destination?
+
     }
     interface Presenter:BasePresenter<View>{
         fun onDeparturePlaceClicked()
@@ -39,5 +43,6 @@ interface MainContract{
         fun onDeparturePlaceSelected(place:Place)
         fun onStartButtonPressed()
         fun onChangeArrivalPressed()
+        fun reloadSettings()
     }
 }

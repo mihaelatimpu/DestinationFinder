@@ -34,6 +34,7 @@
         <item>200m</item>
         <item>500m</item>
         <item>1 km</item>
+        <item>10 km</item>
         <item>Automatic</item>
     </string-array>
     <string name="transport_mode">Transport mode</string>

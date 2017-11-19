@@ -15,18 +15,23 @@ import org.jetbrains.anko.textColor
  * Created by Mimi on 18/11/2017.
  *
  */
-class PlaceTypeAdapter(private val allItems:List<String>,
-                       private val selectedItems:ArrayList<String> = arrayListOf(),
-                       val context:Context): RecyclerView.Adapter<ViewHolder>() {
+class PlaceTypeAdapter(private val allItems: List<String>,
+                       val selectedItems: ArrayList<String> = arrayListOf(),
+                       val context: Context) : RecyclerView.Adapter<ViewHolder>() {
     override fun getItemCount() = allItems.size
+    fun refreshSelectedItems(selectedItems: List<String>) {
+        this.selectedItems.clear()
+        this.selectedItems.addAll(selectedItems)
+        notifyDataSetChanged()
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int)
-     = ViewHolder(LayoutInflater.from(context).inflate(R.layout.item_place_type,parent,false))
+            = ViewHolder(LayoutInflater.from(context).inflate(R.layout.item_place_type, parent, false))
 
     override fun onBindViewHolder(holder: ViewHolder?, position: Int) {
         val name = allItems[position]
-        holder?.bindItem(name,selectedItems.contains(name)){
-            if(selectedItems.contains(name))
+        holder?.bindItem(name, selectedItems.contains(name)) {
+            if (selectedItems.contains(name))
                 selectedItems.remove(name)
             else
                 selectedItems.add(name)
@@ -36,19 +41,11 @@ class PlaceTypeAdapter(private val allItems:List<String>,
     }
 
 }
-class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
-    fun bindItem(name:String, isSelected:Boolean, onClick:(Int)->Unit){
-        with(itemView.label){
-            text = name
-            if(isSelected){
-                textColor = ContextCompat.getColor(context, android.R.color.white)
-                backgroundColor = ContextCompat.getColor(context,R.color.colorPrimary)
-            } else {
-                textColor = ContextCompat.getColor(context, R.color.colorPrimary)
-                backgroundColor = ContextCompat.getColor(context,android.R.color.white)
 
-            }
-            setOnClickListener { onClick(adapterPosition) }
-        }
+class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    fun bindItem(name: String, isSelected: Boolean, onClick: (Int) -> Unit) {
+        itemView.label.text = name
+        itemView.checkbox.isChecked = isSelected
+        itemView.root.setOnClickListener{onClick(adapterPosition)}
     }
 }

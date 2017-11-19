@@ -1,9 +1,8 @@
 package com.mimi.destinationfinder.repository.googleApi
 
-import com.mimi.destinationfinder.repository.googleApi.responses.GetPlaceAddressResponse
 import com.mimi.destinationfinder.repository.googleApi.responses.GetPlacesNearbyResponse
+import com.mimi.destinationfinder.repository.googleApi.responses.TravelTimeResponse
 import io.reactivex.Observable
-import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -18,7 +17,12 @@ interface RetrofitInterface {
                         @Query("radius") radius: Int, @Query("type") type: String)
             : Observable<GetPlacesNearbyResponse>
 
-    @GET("/maps/api/place/details/json")
-    fun getPlaceAddress(@Query("key") apiKey: String, @Query("placeid") placeId: String)
-            : Observable<GetPlaceAddressResponse>
+    @GET("/maps/api/directions/json")
+    fun getTravelTime(@Query("key") apiKey: String,
+                      @Query("origin") origin: String,
+                      @Query("destination") destination: String,
+                      @Query("mode") travelMode: String,
+                      @Query("units") units: String)
+            : Observable<TravelTimeResponse>
+
 }

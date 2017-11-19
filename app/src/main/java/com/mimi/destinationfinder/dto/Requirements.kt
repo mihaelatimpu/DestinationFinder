@@ -11,16 +11,9 @@ class Requirements {
     lateinit var initialLocation: Location
     val departureTime: Calendar = Calendar.getInstance()
     val arrivalTime: Calendar = Calendar.getInstance()
-    val radius: Int = 500
-    var types: List<String> = listOf(
-            "airport", "hospital",
-            "amusement_park", "aquarium",
-            "bank", "bar", "gym",
-            "meal_takeaway", "cafe",
-            "dentist", "university")
-    val transportMean: TransportMean = TransportMean(TransportMean.TYPE_WALKING)
-    val maxResults: Long = 10
+    var settings: Settings = Settings.default()
 
     private fun getTravelTimeInMillis() = arrivalTime.timeInMillis - departureTime.timeInMillis
-    fun getTravelTimeInMinutes() = TimeUnit.MILLISECONDS.toMinutes(getTravelTimeInMillis())
+    fun givenTravelTime() = TimeUnit.MILLISECONDS.toMinutes(getTravelTimeInMillis())
+    fun getSearchRadius() = settings.radius.getMaxRadiusInMeters(this)
 }
