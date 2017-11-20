@@ -21,9 +21,10 @@
         style="@style/AppInputText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/departureLocationLabel"
+        android:layout_marginStart="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/departureLocationLabel"
+        app:layout_constraintStart_toEndOf="@+id/departureLocationLabel"
+        app:layout_constraintTop_toTopOf="@+id/departureLocationLabel"
         tools:text="Walldorf, GERMANY" />
 
     <TextView
@@ -151,8 +152,8 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:padding="10dp"
-        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
+        android:padding="5dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
         app:layout_constraintBottom_toTopOf="@+id/startButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -164,9 +165,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
-        android:layout_marginTop="8dp"
         android:text="@string/not_your_desire_address"
+        android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/arrivalPlace"
-        android:layout_marginRight="8dp" />
+        app:layout_constraintTop_toBottomOf="@+id/arrivalPlace" />
 </android.support.constraint.ConstraintLayout>

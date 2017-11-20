@@ -1,4 +1,4 @@
-package com.mimi.destinationfinder.repository.googleApi
+package com.mimi.destinationfinder.repository.retrofit
 
 import com.mimi.destinationfinder.dto.GooglePlace
 import com.mimi.destinationfinder.dto.Requirements
@@ -12,23 +12,22 @@ import com.mimi.destinationfinder.utils.TimeCalculator
 class FilterPlacesUtil {
     private val timeCalculator = TimeCalculator()
 
-    fun filterPlaces(initialList: List<GooglePlace>, data:Requirements): List<GooglePlace> {
-
+    fun calculateTravelTime(initialList: List<GooglePlace>, data: Requirements): List<GooglePlace> {
         initialList.forEach {
             val calculatedTime = timeCalculator.calculateTime(
-                    from = data.initialLocation, to = it.geometry.location,
+                    from = data.initialCoordinates, to = it.geometry.location,
                     mean = data.settings.transportMode)
 
             it.errorMargin = Math.abs(calculatedTime - data.givenTravelTime())
         }
+        return initialList
+    }
 
-        val listReorderedByMinutes = initialList.sortedBy {
-            it.errorMargin
-
-        }
-        return if (listReorderedByMinutes.size < data.settings.maxResultPerCount.getMaxResults())
-            listReorderedByMinutes
+    fun getBestPlaces(initialList: List<GooglePlace>, data: Requirements): List<GooglePlace> {
+        val rankedLst = initialList.sortedBy { it.errorMargin }
+        return if (rankedLst.size < data.settings.maxResults.getMaxResults())
+            rankedLst
         else
-            listReorderedByMinutes.subList(0, data.settings.maxResultPerCount.getMaxResults())
+            rankedLst.subList(0, data.settings.maxResults.getMaxResults())
     }
 }

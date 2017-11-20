@@ -1,7 +1,7 @@
-package com.mimi.destinationfinder.repository.googleApi
+package com.mimi.destinationfinder.repository.retrofit
 
-import com.mimi.destinationfinder.repository.googleApi.responses.GetPlacesNearbyResponse
-import com.mimi.destinationfinder.repository.googleApi.responses.TravelTimeResponse
+import com.mimi.destinationfinder.repository.retrofit.responses.GetPlacesNearbyResponse
+import com.mimi.destinationfinder.repository.retrofit.responses.TravelTimeResponse
 import io.reactivex.Observable
 import retrofit2.http.GET
 import retrofit2.http.Query

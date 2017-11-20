@@ -1,4 +1,4 @@
-package com.mimi.destinationfinder.repository.googleApi.responses
+package com.mimi.destinationfinder.repository.retrofit.responses
 
 import com.mimi.destinationfinder.dto.GooglePlace
 

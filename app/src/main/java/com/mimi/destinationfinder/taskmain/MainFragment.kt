@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.mimi.destinationfinder.R
 import com.mimi.destinationfinder.base.BaseFragment
-import com.mimi.destinationfinder.dto.Destination
+import com.mimi.destinationfinder.dto.Location
 import com.mimi.destinationfinder.utils.Context
 import com.mimi.destinationfinder.utils.CurrentLocationUtil
 import kotlinx.android.synthetic.main.fragment_main.*
@@ -55,7 +55,7 @@ class MainFragment : BaseFragment(), MainContract.View {
         arrivalTime.setOnClickListener { presenter.onArrivalTimeClicked() }
         arrivalTimeLabel.setOnClickListener { presenter.onArrivalTimeClicked() }
 
-        startButton.setOnClickListener { presenter.onStartButtonPressed() }
+        startButton.setOnClickListener { presenter.startSearch() }
 
         changeArrivalLocation.setOnClickListener { presenter.onChangeArrivalPressed() }
         changeArrivalLocation.visibility = View.INVISIBLE
@@ -82,7 +82,7 @@ class MainFragment : BaseFragment(), MainContract.View {
         }
     }
 
-    override fun getCurrentLocation(fromGPS: Boolean, fromNetwork: Boolean): Destination? {
+    override fun getCurrentLocation(fromGPS: Boolean, fromNetwork: Boolean): Location? {
         val provider = when {
             fromGPS -> LocationManager.GPS_PROVIDER
             fromNetwork -> LocationManager.NETWORK_PROVIDER
@@ -96,7 +96,7 @@ class MainFragment : BaseFragment(), MainContract.View {
         departureTime.text = time
     }
 
-    override fun showArrivalAddress(address: String) {
+    override fun showDestination(address: String) {
         arrivalPlace.post {
             arrivalPlace.text = address
 
@@ -107,13 +107,13 @@ class MainFragment : BaseFragment(), MainContract.View {
         }
     }
 
-    override fun hideArrivalAddress() {
+    override fun hideDestination() {
         changeArrivalLocation.visibility = View.INVISIBLE
         arrivalPlace.visibility = View.INVISIBLE
     }
 
-    override fun showListSelector(options: List<String>, onSelected: (String) -> Unit) {
+    override fun showListSelector(options: List<String>, onSelected: (Int) -> Unit) {
         selector(title = getText(R.string.select_arrival_location), items = options,
-                onClick = { _, position -> onSelected(options[position]) })
+                onClick = { _, position -> onSelected(position) })
     }
 }

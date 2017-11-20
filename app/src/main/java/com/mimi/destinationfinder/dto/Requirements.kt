@@ -5,10 +5,18 @@ import java.util.concurrent.TimeUnit
 
 /**
  * Created by Mimi on 18/11/2017.
- * The necessary information in order to find the location
+ * The required information in order to find the coordinates
  */
 class Requirements {
-    lateinit var initialLocation: Location
+    companion object {
+        fun initialRequirements(): Requirements {
+            val rq = Requirements()
+            rq.arrivalTime.add(Calendar.HOUR, 1)
+            return rq
+        }
+    }
+
+    lateinit var initialCoordinates: Coordinates
     val departureTime: Calendar = Calendar.getInstance()
     val arrivalTime: Calendar = Calendar.getInstance()
     var settings: Settings = Settings.default()

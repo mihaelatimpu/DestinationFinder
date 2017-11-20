@@ -3,8 +3,11 @@ package com.mimi.destinationfinder.taskmain
 import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.ConnectivityManager
+import android.os.Build
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
@@ -21,8 +24,7 @@ import org.koin.android.ext.android.inject
 import java.util.*
 
 /**
- * An example full-screen activity that shows and hides the system UI (i.e.
- * status bar and navigation/system bar) with user interaction.
+ *
  */
 class DestinationFinderActivity : AppCompatActivity(), MainContract.Activity {
     companion object {
@@ -43,13 +45,17 @@ class DestinationFinderActivity : AppCompatActivity(), MainContract.Activity {
         supportActionBar?.setDisplayHomeAsUpEnabled(false)
 
         mVisible = true
-
         supportFragmentManager.findFragmentById(R.id.contentFrame) as MainFragment?
                 ?: fragment.also {
             replaceFragmentInActivity(it, R.id.contentFrame)
         }
         presenter.view = fragment
     }
+
+    override fun isInternetConnected()
+            = (getSystemService(Context.CONNECTIVITY_SERVICE) as
+            ConnectivityManager).activeNetworkInfo != null
+
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.main, menu)
@@ -58,6 +64,7 @@ class DestinationFinderActivity : AppCompatActivity(), MainContract.Activity {
 
     override fun checkForPermission(permission: String, title: Int,
                                     description: Int, onPermissionResult: (Boolean) -> Unit) {
+        this.onPermissionResult = onPermissionResult
         if (ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED) {
             onPermissionResult(true)
             return
@@ -74,8 +81,9 @@ class DestinationFinderActivity : AppCompatActivity(), MainContract.Activity {
                 }
             }.show()
         } else {
-            this.onPermissionResult = onPermissionResult
-            ActivityCompat.requestPermissions(this, arrayOf(permission), REQUESTING_PERMISSION)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                requestPermissions(arrayOf(permission), REQUESTING_PERMISSION)
+            }
         }
     }
 
@@ -115,10 +123,12 @@ class DestinationFinderActivity : AppCompatActivity(), MainContract.Activity {
         val initialMinute = initialDate.get(Calendar.MINUTE)
         val timePicker = TimePickerDialog(this,
                 TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
-                    initialDate.set(Calendar.HOUR_OF_DAY, hourOfDay)
-                    initialDate.set(Calendar.MINUTE, minute)
-                    onComplete(initialDate)
-                }, initialHour, initialMinute, true)
+                    val newCalendar = Calendar.getInstance()
+                    newCalendar.timeInMillis = initialDate.timeInMillis
+                    newCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay)
+                    newCalendar.set(Calendar.MINUTE, minute)
+                    onComplete(newCalendar)
+                }, initialHour, initialMinute, false)
         timePicker.show()
     }
 

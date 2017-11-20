@@ -2,7 +2,6 @@ package com.mimi.destinationfinder.settings
 
 import android.os.Bundle
 import android.support.v7.widget.GridLayoutManager
-import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -53,14 +52,14 @@ class SettingsFragment : BaseFragment(), SettingsContract.View {
     override fun refreshSettings(settings: Settings) {
         radius_spinner.setSelection(settings.radius.type)
         transportModeSpinner.setSelection(settings.transportMode.type)
-        maxResultsSpinner.setSelection(settings.maxResultPerCount.type)
+        maxResultsSpinner.setSelection(settings.maxResults.type)
         adapter.refreshSelectedItems(settings.placesOnInterests)
     }
 
     override fun collectSettings() =
             Settings(radius = Radius(radius_spinner.selectedItemPosition),
                     transportMode = TransportMode(transportModeSpinner.selectedItemPosition),
-                    maxResultPerCount = ResultsCount(maxResultsSpinner.selectedItemPosition),
+                    maxResults = ResultsCount(maxResultsSpinner.selectedItemPosition),
                     placesOnInterests = adapter.selectedItems)
 
 }

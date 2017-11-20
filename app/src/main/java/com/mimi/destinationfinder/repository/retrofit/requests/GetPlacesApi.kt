@@ -1,18 +1,18 @@
-package com.mimi.destinationfinder.repository.googleApi.requests
+package com.mimi.destinationfinder.repository.retrofit.requests
 
 import android.content.Context
 import com.mimi.destinationfinder.dto.GooglePlace
 import com.mimi.destinationfinder.dto.Requirements
-import com.mimi.destinationfinder.repository.googleApi.ApiClient
-import com.mimi.destinationfinder.repository.googleApi.RetrofitInterface
-import com.mimi.destinationfinder.repository.googleApi.responses.GetPlacesNearbyResponse
+import com.mimi.destinationfinder.repository.retrofit.ApiClient
+import com.mimi.destinationfinder.repository.retrofit.RetrofitInterface
+import com.mimi.destinationfinder.repository.retrofit.responses.GetPlacesNearbyResponse
 import io.reactivex.Observable
 
 /**
  * Created by Mimi on 17/11/2017.
  *
  */
-class RequestGetPlaces(val data: Requirements) {
+class GetPlacesApi(val data: Requirements) {
 
     fun start(context: Context): Observable<GooglePlace> {
         val api = ApiClient.googleApi
@@ -26,7 +26,7 @@ class RequestGetPlaces(val data: Requirements) {
             : Observable<GetPlacesNearbyResponse> {
         val observableList = data.settings.placesOnInterests.map {
             api.getPlacesNearby(apiKey,
-                    data.initialLocation.toString(), data.getSearchRadius(), it)
+                    data.initialCoordinates.toString(), data.getSearchRadius(), it)
         }
         return Observable.mergeDelayError(observableList)
 

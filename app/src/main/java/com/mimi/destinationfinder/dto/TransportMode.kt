@@ -13,7 +13,7 @@ class TransportMode( val type: Int) {
     }
 
     /**
-     * get the approximate speed as meters per minute based on mean
+     * get the approximate speed as meters per minute based on type
      */
     fun getSpeedPerMinute(): Double {
         val kmPerHour = when (type) {

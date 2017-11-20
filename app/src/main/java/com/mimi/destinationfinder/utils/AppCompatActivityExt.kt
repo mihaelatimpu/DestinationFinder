@@ -1,5 +1,7 @@
 package com.mimi.destinationfinder.utils
 
+import android.content.Context
+import android.net.ConnectivityManager
 import android.support.annotation.IdRes
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
@@ -23,23 +25,6 @@ fun AppCompatActivity.replaceFragmentInActivity(fragment: Fragment, @IdRes frame
 }
 
 /**
- * The `fragment` is added to the container view with tag. The operation is
- * performed by the `fragmentManager`.
- */
-fun AppCompatActivity.addFragmentToActivity(fragment: Fragment, tag: String) {
-    supportFragmentManager.transact {
-        add(fragment, tag)
-    }
-}
-
-fun AppCompatActivity.setupActionBar(@IdRes toolbarId: Int, action: ActionBar.() -> Unit) {
-    setSupportActionBar(findViewById(toolbarId))
-    supportActionBar?.run {
-        action()
-    }
-}
-
-/**
  * Runs a FragmentTransaction, then calls commit().
  */
 private inline fun FragmentManager.transact(action: FragmentTransaction.() -> Unit) {
@@ -47,3 +32,4 @@ private inline fun FragmentManager.transact(action: FragmentTransaction.() -> Un
         action()
     }.commit()
 }
+

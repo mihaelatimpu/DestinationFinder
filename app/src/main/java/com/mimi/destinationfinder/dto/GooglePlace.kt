@@ -10,4 +10,4 @@ class GooglePlace(val geometry: Geometry, val place_id: String) : Comparable<Goo
     var errorMargin = 0.0
 }
 
-class Geometry(val location: Location)
+class Geometry(val location: Coordinates)

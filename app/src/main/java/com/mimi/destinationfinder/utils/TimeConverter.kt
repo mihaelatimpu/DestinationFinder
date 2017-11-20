@@ -12,11 +12,11 @@ class TimeConverter{
         val REGULAR_DATE_PATTERN = "MMM d, YYYY"
         val REGULAR_TIME_PATTERN = "hh:mm a"
     }
-    fun convertToRegularDateString(calendar: Calendar = Calendar.getInstance()):String{
+    fun toRegularDateString(calendar: Calendar = Calendar.getInstance()):String{
         val sdf = SimpleDateFormat(REGULAR_DATE_PATTERN, Locale.ENGLISH)
         return sdf.format(calendar.time)
     }
-    fun convertToRegularTimeString(calendar: Calendar = Calendar.getInstance()):String{
+    fun toRegularTimeString(calendar: Calendar = Calendar.getInstance()):String{
         val sdf = SimpleDateFormat(REGULAR_TIME_PATTERN, Locale.ENGLISH)
         return sdf.format(calendar.time)
     }

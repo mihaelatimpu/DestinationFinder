@@ -22,7 +22,7 @@ object SharedPreferenceUtils {
         val editor = prefs.edit()
         editor.putInt(RADIUS, settings.radius.type)
         editor.putInt(TRANSPORT_MODE, settings.transportMode.type)
-        editor.putInt(MAX_RESULTS, settings.maxResultPerCount.type)
+        editor.putInt(MAX_RESULTS, settings.maxResults.type)
         editor.putStringSet(PLACES_OF_INTERES, settings.placesOnInterests.toSet())
         editor.apply()
     }
@@ -33,8 +33,8 @@ object SharedPreferenceUtils {
         with(settings) {
             radius = Radius(prefs.getInt(RADIUS, radius.type))
             transportMode = TransportMode(prefs.getInt(TRANSPORT_MODE, transportMode.type))
-            maxResultPerCount = ResultsCount(prefs.getInt(MAX_RESULTS,
-                    maxResultPerCount.type))
+            maxResults = ResultsCount(prefs.getInt(MAX_RESULTS,
+                    maxResults.type))
             placesOnInterests = prefs.getStringSet(PLACES_OF_INTERES,
                     placesOnInterests.toSet()).toList()
         }

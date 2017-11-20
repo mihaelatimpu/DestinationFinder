@@ -1,4 +1,4 @@
-package com.mimi.destinationfinder.repository.googleApi
+package com.mimi.destinationfinder.repository.retrofit
 
 import android.content.Context
 import android.content.pm.PackageManager
